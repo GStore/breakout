@@ -10,6 +10,8 @@ export class Breakout {
   private paddleHeight: number = 10;
   private paddleWidth: number = 75;
   private paddleX: number = (this.canvas.width-this.paddleWidth) / 2;
+  private rightPressed: boolean = false;
+  private leftPressed: boolean = false;
 
   constructor(private ctx: ContextPath2D, private canvas: HTMLCanvasElement) {
     this.x = canvas.width/2;
@@ -32,8 +34,11 @@ export class Breakout {
     this.checkY();
     this.checkX();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.fillStyle("#0095DD");
-    this.ctx.circle(this.x, this.y, this.ballRadius, 0, Math.PI*2);
+    this.ctx.fillStyle("#0095DD")
+            .circle(this.x, this.y, this.ballRadius, 0, Math.PI*2);
+    this.ctx.fillStyle("#0095DD")
+            .square(this.paddleX, this.canvas.height-this.paddleHeight, this.paddleWidth, this.paddleHeight);
+
     this.x += this.dx;
     this.y += this.dy;
   }
