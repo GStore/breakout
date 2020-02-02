@@ -1,62 +1,94 @@
 import { ContextPath2D } from "./ContextPath2D";
+interface IPosition {
+  x: number,
+  y: number
+}
+
+interface IPaddle {
+  height: number,
+  width: number,
+  x: number
+}
+
+const PADDLEWIDTH: number = 75;
 
 export class Breakout {
-  private x!: number;
-  private y!: number;
-  private dx: number = 2;
-  private dy: number = -2;
+  
+  private ballPosition: IPosition = {} as IPosition;
+  private ballChange: IPosition = { x: 2, y: -2} as IPosition;
   private ballRadius: number = 10;
 
-  private paddleHeight: number = 10;
-  private paddleWidth: number = 75;
-  private paddleX: number = (this.canvas.width-this.paddleWidth) / 2;
+  private paddle: IPaddle = {
+    height: 10,
+    width: PADDLEWIDTH,
+    x: (this.canvas.width-PADDLEWIDTH) / 2
+  }
   private rightPressed: boolean = false;
   private leftPressed: boolean = false;
 
   constructor(private ctx: ContextPath2D, private canvas: HTMLCanvasElement) {
-    this.x = canvas.width/2;
-    this.y = canvas.height/2;
+    this.ballPosition.x = canvas.width/2;
+    this.ballPosition.y = canvas.height/2;
   }
 
   checkY = () => {
-    if(this.y + this.dy > this.canvas.height - this.ballRadius || this.y + this.dy < this.ballRadius) {
-      this.dy = -this.dy;
+    if(this.ballPosition.y + this.ballChange.x > this.canvas.height - this.ballRadius || this.ballPosition.y + this.ballChange.y < this.ballRadius) {
+      this.ballChange.y = -this.ballChange.y;
     }
   }
 
   checkX = () => {
-    if(this.x + this.dx > this.canvas.width - this.ballRadius || this.x + this.dx < this.ballRadius) {
-      this.dx = -this.dx;
+    if(this.ballPosition.x + this.ballChange.x > this.canvas.width - this.ballRadius || this.ballPosition.x + this.ballChange.x < this.ballRadius) {
+      this.ballChange.x = -this.ballChange.x;
     }
   }
 
   checkPaddle = () => {
     if(this.rightPressed) {
-      this.paddleX += 7;
-      if (this.paddleX + this.paddleWidth > this.canvas.width){
-        this.paddleX = this.canvas.width - this.paddleWidth;
+      this.paddle.x += 7;
+      if (this.paddle.x + this.paddle.width > this.canvas.width){
+        this.paddle.x = this.canvas.width - this.paddle.width;
       }
     }
 
     if(this.leftPressed) {
-      this.paddleX += -7;
-      if (this.paddleX < 0){
-        this.paddleX = 0;
+      this.paddle.x += -7;
+      if (this.paddle.x < 0){
+        this.paddle.x = 0;
       }
     }
   }
 
+  clearGameArea = () => {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  drawBall = () => {
+    this.ctx
+      .fillStyle("#0095DD")
+      .circle(this.ballPosition.x, this.ballPosition.y, this.ballRadius, 0, Math.PI*2);
+  }
+
+  drawPaddle = () => {
+    this.ctx
+      .fillStyle("#0095DD")
+      .square(this.paddle.x, this.canvas.height-this.paddle.height, this.paddle.width, this.paddle.height);
+  }
+
+  drawGameObjects = () => {
+    this.clearGameArea();
+    this.drawBall();
+    this.drawPaddle();
+    
+  }
+
   draw = () => {
+    this.drawGameObjects();
     this.checkY();
     this.checkX();
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.fillStyle("#0095DD")
-            .circle(this.x, this.y, this.ballRadius, 0, Math.PI*2);
-    this.ctx.fillStyle("#0095DD")
-            .square(this.paddleX, this.canvas.height-this.paddleHeight, this.paddleWidth, this.paddleHeight);
-
-    this.x += this.dx;
-    this.y += this.dy;
+    
+    this.ballPosition.x += this.ballChange.x;
+    this.ballPosition.y += this.ballChange.y;
     this.checkPaddle();
     
   }
