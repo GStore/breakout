@@ -13,13 +13,13 @@ export class Breakout {
   }
 
   checkY = () => {
-    if(this.y + this.dy > this.canvas.height || this.y + this.dy < 0) {
+    if(this.y + this.dy > this.canvas.height - this.ballRadius || this.y + this.dy < this.ballRadius) {
       this.dy = -this.dy;
     }
   }
 
   checkX = () => {
-    if(this.x + this.dx > this.canvas.width || this.x + this.dx < 0) {
+    if(this.x + this.dx > this.canvas.width - this.ballRadius || this.x + this.dx < this.ballRadius) {
       this.dx = -this.dx;
     }
   }
