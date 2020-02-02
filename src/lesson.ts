@@ -1,22 +1,21 @@
 import { ContextPath2D } from "./ContextPath2D";
 
-const squares = [
-  ["#FF0000", 0, 40, 50, 50],
-  ["rgba(0, 0, 255, 0.5)", 160, 10, 100, 40]
-];
+export class Breakout {
+  private x!: number;
+  private y!: number;
+  private dx: number = 2;
+  private dy: number = -2;
 
-const circles = [
-  ["green", 240, 160, 20, 0, Math.PI*2, false]
-
-];
-
-export const Lesson1 = (ctx: ContextPath2D) => {
-  for(let square of squares) {
-    ctx.fillStyle(String(square[0]));
-    ctx.square(Number(square[1]),Number(square[2]),Number(square[3]), Number(square[4]));
+  constructor(private ctx: ContextPath2D, private canvas: HTMLCanvasElement) {
+    this.x = canvas.width/2;
+    this.y = canvas.height/2;
   }
-  for(let circle of circles) {
-    ctx.fillStyle(String(circle[0]));
-    ctx.circle(Number(circle[1]),Number(circle[2]), Number(circle[3]), Number(circle[4]), Number(circle[5]), Boolean(circle[6]));
+
+  draw = () => {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillStyle("#0095DD");
+    this.ctx.circle(this.x, this.y, 10, 0, Math.PI*2);
+    this.x += this.dx;
+    this.y += this.dy;
   }
 }
