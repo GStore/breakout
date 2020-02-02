@@ -7,6 +7,10 @@ export class Breakout {
   private dy: number = -2;
   private ballRadius: number = 10;
 
+  private paddleHeight: number = 10;
+  private paddleWidth: number = 75;
+  private paddleX: number = (this.canvas.width-this.paddleWidth) / 2;
+
   constructor(private ctx: ContextPath2D, private canvas: HTMLCanvasElement) {
     this.x = canvas.width/2;
     this.y = canvas.height/2;
