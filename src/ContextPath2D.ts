@@ -42,6 +42,11 @@ export class ContextPath2D {
     return this;
   }
 
+  clearRect = (x: number, y: number, w: number, h: number): ContextPath2D => {
+    this.ctx?.clearRect(x, y, w, h);
+    return this;
+  }
+
   square = (x: number, y: number, w: number, h: number) => {
     console.log("square");
     this
@@ -53,7 +58,7 @@ export class ContextPath2D {
   }
 
   circle = (x: number, y: number, radius: number, startAngle: number, 
-            endAngle: number, antiClockwise: boolean | undefined): ContextPath2D => {
+            endAngle: number, antiClockwise?: boolean | undefined): ContextPath2D => {
     console.log("circle");
     this
       .beginPath()
