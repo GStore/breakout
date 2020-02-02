@@ -30,17 +30,7 @@ export class Breakout {
     }
   }
 
-  draw = () => {
-    this.checkY();
-    this.checkX();
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.fillStyle("#0095DD")
-            .circle(this.x, this.y, this.ballRadius, 0, Math.PI*2);
-    this.ctx.fillStyle("#0095DD")
-            .square(this.paddleX, this.canvas.height-this.paddleHeight, this.paddleWidth, this.paddleHeight);
-
-    this.x += this.dx;
-    this.y += this.dy;
+  checkPaddle = () => {
     if(this.rightPressed) {
       this.paddleX += 7;
       if (this.paddleX + this.paddleWidth > this.canvas.width){
@@ -54,6 +44,21 @@ export class Breakout {
         this.paddleX = 0;
       }
     }
+  }
+
+  draw = () => {
+    this.checkY();
+    this.checkX();
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillStyle("#0095DD")
+            .circle(this.x, this.y, this.ballRadius, 0, Math.PI*2);
+    this.ctx.fillStyle("#0095DD")
+            .square(this.paddleX, this.canvas.height-this.paddleHeight, this.paddleWidth, this.paddleHeight);
+
+    this.x += this.dx;
+    this.y += this.dy;
+    this.checkPaddle();
+    
   }
 
   keyDown = (event: KeyboardEvent) => {
