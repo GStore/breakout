@@ -43,10 +43,16 @@ export class Breakout {
     this.y += this.dy;
     if(this.rightPressed) {
       this.paddleX += 7;
+      if (this.paddleX + this.paddleWidth > this.canvas.width){
+        this.paddleX = this.canvas.width - this.paddleWidth;
+      }
     }
 
     if(this.leftPressed) {
       this.paddleX += -7;
+      if (this.paddleX < 0){
+        this.paddleX = 0;
+      }
     }
   }
 
