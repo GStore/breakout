@@ -41,5 +41,30 @@ export class Breakout {
 
     this.x += this.dx;
     this.y += this.dy;
+    if(this.rightPressed) {
+      this.paddleX += 7;
+    }
+
+    if(this.leftPressed) {
+      this.paddleX += -7;
+    }
+  }
+
+  keyDown = (event: KeyboardEvent) => {
+    if(event.key == "Right" || event.key == "ArrowRight") {
+      this.rightPressed = true;
+    }
+    else if(event.key == "Left" || event.key == "ArrowLeft") {
+        this.leftPressed = true;
+    }
+  }
+  
+  keyUp = (event: KeyboardEvent) => {
+    if(event.key == "Right" || event.key == "ArrowRight") {
+      this.rightPressed = false;
+    }
+    else if(event.key == "Left" || event.key == "ArrowLeft") {
+        this.leftPressed = false;
+    }
   }
 }
