@@ -10,11 +10,22 @@ interface IPaddle {
   x: number
 }
 
+interface IBrick extends IPosition {
+
+}
+
 const PADDLEWIDTH: number = 75;
 const PADDLEHEIGHT: number = 10;
 const REFRESHRATE: number = 10;
 const BALLMOVEX: number = 2;
 const BALLMOVEY: number = -2;
+const BRICKCOLUMNCOUNT: number = 5;
+const BRICKROWCOUNT: number = 3;
+const BRICKWIDTH: number = 75;
+const BRICKHEIGHT: number = 20;
+const BRICKPADDING: number = 10;
+const BRICKOFFSETTOP: number = 30;
+const BRICKOFFSETLEFT: number = 30;
 
 export class Breakout {
   
@@ -22,6 +33,7 @@ export class Breakout {
   private ballChange: IPosition = { x: BALLMOVEX, y: BALLMOVEY} as IPosition;
   private ballRadius: number = 10;
   private interval!: number;
+  private bricks: IBrick[][] = [];
 
   private paddle: IPaddle = {
     height: PADDLEHEIGHT,
@@ -34,6 +46,7 @@ export class Breakout {
   constructor(private ctx: ContextPath2D, private canvas: HTMLCanvasElement) {
     this.ballPosition.x = canvas.width/2;
     this.ballPosition.y = canvas.height/2;
+    this.createBricks();
   }
 
   checkY = () => {
@@ -90,11 +103,32 @@ export class Breakout {
       .square(this.paddle.x, this.canvas.height-this.paddle.height, this.paddle.width, this.paddle.height);
   }
 
+  drawBricks = () => {
+    for(let c=0; c<BRICKCOLUMNCOUNT;c++) {
+      for(let r=0; r<BRICKROWCOUNT;r++) {
+        this.bricks[c][r].x = (c*(BRICKWIDTH+BRICKPADDING))+BRICKOFFSETLEFT;
+        this.bricks[c][r].y = (r*(BRICKHEIGHT+BRICKPADDING))+BRICKOFFSETTOP;
+        this.ctx
+          .fillStyle("#0095DD")
+          .square(this.bricks[c][r].x , this.bricks[c][r].y, BRICKWIDTH, BRICKHEIGHT);
+      }
+    }
+  }
+
+  createBricks = () => {
+    for(let c=0; c<BRICKCOLUMNCOUNT; c++) {
+        this.bricks[c] = [];
+        for(let r=0; r<BRICKROWCOUNT; r++) {
+            this.bricks[c][r] = { x: 0, y: 0 };
+        }
+    }
+  }
+
   drawGameObjects = () => {
     this.clearGameArea();
     this.drawBall();
     this.drawPaddle();
-    
+    this.drawBricks();
   }
 
   draw = () => {
