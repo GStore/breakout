@@ -8,4 +8,4 @@ const breakout = new Breakout(ctx, canvas);
 
 document.addEventListener("keydown", breakout.keyDown, false);
 document.addEventListener("keyup", breakout.keyUp, false);
-setInterval(breakout.draw, 10);
+breakout.run();

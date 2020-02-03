@@ -11,15 +11,20 @@ interface IPaddle {
 }
 
 const PADDLEWIDTH: number = 75;
+const PADDLEHEIGHT: number = 10;
+const REFRESHRATE: number = 10;
+const BALLMOVEX: number = 2;
+const BALLMOVEY: number = -2;
 
 export class Breakout {
   
   private ballPosition: IPosition = {} as IPosition;
-  private ballChange: IPosition = { x: 2, y: -2} as IPosition;
+  private ballChange: IPosition = { x: BALLMOVEX, y: BALLMOVEY} as IPosition;
   private ballRadius: number = 10;
+  private interval!: number;
 
   private paddle: IPaddle = {
-    height: 10,
+    height: PADDLEHEIGHT,
     width: PADDLEWIDTH,
     x: (this.canvas.width-PADDLEWIDTH) / 2
   }
@@ -32,8 +37,12 @@ export class Breakout {
   }
 
   checkY = () => {
-    if(this.ballPosition.y + this.ballChange.x > this.canvas.height - this.ballRadius || this.ballPosition.y + this.ballChange.y < this.ballRadius) {
+    if(this.ballPosition.y + this.ballChange.y < this.ballRadius) {
       this.ballChange.y = -this.ballChange.y;
+    } else if(this.ballPosition.y + this.ballChange.y > this.canvas.height - this.ballRadius) {
+      alert("Game Over");
+      document.location.reload();
+      clearInterval(this.interval);
     }
   }
 
@@ -109,5 +118,9 @@ export class Breakout {
     else if(event.key == "Left" || event.key == "ArrowLeft") {
         this.leftPressed = false;
     }
+  }
+
+  run = () => {
+    this.interval = setInterval(this.draw, REFRESHRATE);
   }
 }
