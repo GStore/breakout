@@ -5,19 +5,19 @@ export class ContextPath2D {
   }
 
   beginPath = (): ContextPath2D => {
-    console.log("beginPath");
+    // console.log("beginPath");
     this.ctx?.beginPath()
     return this; 
   }
 
   rect = (x: number, y: number, w: number, h: number): ContextPath2D => {
-    console.log("rect");
+    // console.log("rect");
     this.ctx?.rect(x, y, w, h);
     return this;
   }
 
   fillStyle = (colour: string | CanvasGradient | CanvasPattern): ContextPath2D=> {
-    console.log("fillStyle");
+    // console.log("fillStyle");
     if(this.ctx) {
       this.ctx.fillStyle = colour;
     }
@@ -25,19 +25,19 @@ export class ContextPath2D {
   }
 
   fill = (): ContextPath2D => {
-    console.log("fill");
+    // console.log("fill");
     this.ctx?.fill();
     return this;
   }
 
   closePath = (): ContextPath2D => {
-    console.log("closePath");
+    // console.log("closePath");
     this.ctx?.closePath();
     return this;
   }
 
   arc = (x: number, y: number, radius: number, startAngle: number, endAngle: number, antiClockwise: boolean | undefined): ContextPath2D => {
-    console.log("arc");
+    // console.log("arc");
     this.ctx?.arc(x, y, radius, startAngle, endAngle, antiClockwise);
     return this;
   }
@@ -48,7 +48,7 @@ export class ContextPath2D {
   }
 
   square = (x: number, y: number, w: number, h: number) => {
-    console.log("square");
+    // console.log("square");
     this
       .beginPath()
       .rect(x, y, w, h)
@@ -59,7 +59,7 @@ export class ContextPath2D {
 
   circle = (x: number, y: number, radius: number, startAngle: number, 
             endAngle: number, antiClockwise?: boolean | undefined): ContextPath2D => {
-    console.log("circle");
+    // console.log("circle");
     this
       .beginPath()
       .arc(x, y, radius, startAngle, endAngle, antiClockwise)

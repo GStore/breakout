@@ -11,7 +11,7 @@ interface IPaddle {
 }
 
 interface IBrick extends IPosition {
-
+  visible: boolean
 }
 
 const PADDLEWIDTH: number = 75;
@@ -71,6 +71,23 @@ export class Breakout {
     }
   }
 
+  collisionDetection = () => {
+    for(let c=0; c<BRICKCOLUMNCOUNT; c++) {
+      for(let r=0; r<BRICKROWCOUNT; r++) {
+        const currentBrick = this.bricks[c][r];
+        if(currentBrick.visible) {
+          if(this.ballPosition.x > currentBrick.x 
+              && this.ballPosition.x < currentBrick.x+BRICKWIDTH 
+              && this.ballPosition.y > currentBrick.y 
+              && this.ballPosition.y < currentBrick.y+BRICKHEIGHT) {
+                this.ballChange.y = -this.ballChange.y;
+                currentBrick.visible = false;
+              }
+        }
+      }
+    }
+  }
+
   checkPaddle = () => {
     if(this.rightPressed) {
       this.paddle.x += 7;
@@ -108,9 +125,11 @@ export class Breakout {
       for(let r=0; r<BRICKROWCOUNT;r++) {
         this.bricks[c][r].x = (c*(BRICKWIDTH+BRICKPADDING))+BRICKOFFSETLEFT;
         this.bricks[c][r].y = (r*(BRICKHEIGHT+BRICKPADDING))+BRICKOFFSETTOP;
-        this.ctx
-          .fillStyle("#0095DD")
-          .square(this.bricks[c][r].x , this.bricks[c][r].y, BRICKWIDTH, BRICKHEIGHT);
+        if(this.bricks[c][r].visible) {
+          this.ctx
+            .fillStyle("#0095DD")
+            .square(this.bricks[c][r].x , this.bricks[c][r].y, BRICKWIDTH, BRICKHEIGHT);
+        }
       }
     }
   }
@@ -119,26 +138,30 @@ export class Breakout {
     for(let c=0; c<BRICKCOLUMNCOUNT; c++) {
         this.bricks[c] = [];
         for(let r=0; r<BRICKROWCOUNT; r++) {
-            this.bricks[c][r] = { x: 0, y: 0 };
+            this.bricks[c][r] = { x: 0, y: 0, visible: true };
         }
     }
   }
 
   drawGameObjects = () => {
     this.clearGameArea();
+    this.drawBricks();
     this.drawBall();
     this.drawPaddle();
-    this.drawBricks();
+        
   }
 
   draw = () => {
     this.drawGameObjects();
+    this.collisionDetection();
     this.checkY();
     this.checkX();
-    
+    this.checkPaddle();
+
     this.ballPosition.x += this.ballChange.x;
     this.ballPosition.y += this.ballChange.y;
-    this.checkPaddle();
+    
+    
     
   }
 
