@@ -39,10 +39,16 @@ export class Breakout {
   checkY = () => {
     if(this.ballPosition.y + this.ballChange.y < this.ballRadius) {
       this.ballChange.y = -this.ballChange.y;
-    } else if(this.ballPosition.y + this.ballChange.y > this.canvas.height - this.ballRadius) {
-      alert("Game Over");
-      document.location.reload();
-      clearInterval(this.interval);
+    } 
+    else if(this.ballPosition.y + this.ballChange.y > this.canvas.height - this.ballRadius) {
+      if(this.ballPosition.x > this.paddle.x && this.ballPosition.x < this.paddle.x + this.paddle.width) {
+        this.ballChange.y = -this.ballChange.y;
+      } 
+      else {
+        alert("Game Over");
+        document.location.reload();
+        clearInterval(this.interval);
+      }
     }
   }
 
