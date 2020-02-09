@@ -37,4 +37,5 @@ interface IBreakout {
     keyDown(event: KeyboardEvent): void;
     keyUp(event: KeyboardEvent): void;
     run(): void;
+    getScore(): number;
 }

@@ -48,9 +48,11 @@ export class Breakout implements IBreakout {
     }
     if(breakoutVars.bricks) {
       this.bricks = breakoutVars.bricks;
+    } else {
+      this.createBricks();
     }
 
-    this.createBricks();
+    
   }
 
   
@@ -187,5 +189,10 @@ export class Breakout implements IBreakout {
 
   run = () => {
     this.interval = setInterval(this.draw, REFRESHRATE);
+  }
+
+  getScore(): number {
+    const flatBricks: IBrick[] = this.bricks.flat();
+    return flatBricks.filter(f => !f.visible ).length;
   }
 }
