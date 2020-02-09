@@ -40,4 +40,5 @@ interface IBreakout {
     getScore(): number;
     drawScore(): void;
     checkGameState(): void;
+    mouseMoveHandler(event: MouseEvent): void;
 }

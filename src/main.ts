@@ -13,4 +13,5 @@ const breakout = new Breakout(breakoutArgs);
 
 document.addEventListener("keydown", breakout.keyDown, false);
 document.addEventListener("keyup", breakout.keyUp, false);
+document.addEventListener("mousemove", breakout.mouseMoveHandler, false);
 breakout.run();

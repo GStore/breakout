@@ -64,7 +64,7 @@ export class Breakout implements IBreakout {
       if(this.ballPosition.x > this.paddle.x && this.ballPosition.x < this.paddle.x + this.paddle.width) {
         this.ballChange.y = -this.ballChange.y;
       } 
-      else {
+    else {
         alert("Game Over");
         document.location.reload();
         clearInterval(this.interval);
@@ -185,6 +185,21 @@ export class Breakout implements IBreakout {
     }
     else if(event.key == "Left" || event.key == "ArrowLeft") {
         this.leftPressed = false;
+    }
+  }
+
+  mouseMoveHandler = (event: MouseEvent): void => {
+    const relativeX = event.clientX - this.canvas.offsetLeft;
+    if(relativeX < this.paddle.width/2) {
+      this.paddle.x = 0;
+      return;
+    }
+    if(relativeX > this.canvas.width - this.paddle.width/2) {
+      this.paddle.x = this.canvas.width-this.paddle.width;
+      return;
+    }
+    if(relativeX > 0 && relativeX < this.canvas.width) {
+      this.paddle.x = relativeX - this.paddle.width/2;
     }
   }
 
