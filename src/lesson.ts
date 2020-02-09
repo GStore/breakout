@@ -1,19 +1,3 @@
-import { ContextPath2D } from "./ContextPath2D";
-interface IPosition {
-  x: number,
-  y: number
-}
-
-interface IPaddle {
-  height: number,
-  width: number,
-  x: number
-}
-
-interface IBrick extends IPosition {
-  visible: boolean
-}
-
 const PADDLEWIDTH: number = 75;
 const PADDLEHEIGHT: number = 10;
 const REFRESHRATE: number = 10;
@@ -27,28 +11,49 @@ const BRICKPADDING: number = 10;
 const BRICKOFFSETTOP: number = 30;
 const BRICKOFFSETLEFT: number = 30;
 
-export class Breakout {
-  
+export class Breakout implements IBreakout {
+  private ctx!: IContextPath2D;
+  private canvas!: HTMLCanvasElement;
   private ballPosition: IPosition = {} as IPosition;
   private ballChange: IPosition = { x: BALLMOVEX, y: BALLMOVEY} as IPosition;
   private ballRadius: number = 10;
   private interval!: number;
   private bricks: IBrick[][] = [];
 
-  private paddle: IPaddle = {
-    height: PADDLEHEIGHT,
-    width: PADDLEWIDTH,
-    x: (this.canvas.width-PADDLEWIDTH) / 2
-  }
+  private paddle!: IPaddle;
   private rightPressed: boolean = false;
   private leftPressed: boolean = false;
 
-  constructor(private ctx: ContextPath2D, private canvas: HTMLCanvasElement) {
-    this.ballPosition.x = canvas.width/2;
-    this.ballPosition.y = canvas.height/2;
+  constructor(breakoutVars: IBreakoutVariables) {
+    this.ctx = breakoutVars.ctx;
+    this.canvas = breakoutVars.canvas;
+    this.ballPosition.x = this.canvas.width/2;
+    this.ballPosition.y = this.canvas.height/2;
+
+    this.paddle = {
+      height: PADDLEHEIGHT,
+      width: PADDLEWIDTH,
+      x: (this.canvas.width-PADDLEWIDTH) / 2
+    }
+
+    if(breakoutVars.ballPosition) {
+      this.ballPosition = breakoutVars.ballPosition;
+    }
+
+    if(breakoutVars.ballChange) {
+      this.ballChange = breakoutVars.ballChange;
+    }
+    if(breakoutVars.ballRadius) {
+      this.ballRadius = breakoutVars.ballRadius;
+    }
+    if(breakoutVars.bricks) {
+      this.bricks = breakoutVars.bricks;
+    }
+
     this.createBricks();
   }
 
+  
   checkY = () => {
     if(this.ballPosition.y + this.ballChange.y < this.ballRadius) {
       this.ballChange.y = -this.ballChange.y;
@@ -160,9 +165,6 @@ export class Breakout {
 
     this.ballPosition.x += this.ballChange.x;
     this.ballPosition.y += this.ballChange.y;
-    
-    
-    
   }
 
   keyDown = (event: KeyboardEvent) => {
