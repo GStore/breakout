@@ -10,6 +10,7 @@ const BRICKHEIGHT: number = 20;
 const BRICKPADDING: number = 10;
 const BRICKOFFSETTOP: number = 30;
 const BRICKOFFSETLEFT: number = 30;
+const LIVES: number = 3;
 
 export class Breakout implements IBreakout {
   private ctx!: IContextPath2D;
@@ -19,6 +20,7 @@ export class Breakout implements IBreakout {
   private ballRadius: number = 10;
   private interval!: number;
   private bricks: IBrick[][] = [];
+  private lives: number = LIVES;
 
   private paddle!: IPaddle;
   private rightPressed: boolean = false;
@@ -50,11 +52,8 @@ export class Breakout implements IBreakout {
       this.bricks = breakoutVars.bricks;
     } else {
       this.createBricks();
-    }
-
-    
+    }    
   }
-
   
   checkY = () => {
     if(this.ballPosition.y + this.ballChange.y < this.ballRadius) {
@@ -64,10 +63,19 @@ export class Breakout implements IBreakout {
       if(this.ballPosition.x > this.paddle.x && this.ballPosition.x < this.paddle.x + this.paddle.width) {
         this.ballChange.y = -this.ballChange.y;
       } 
-    else {
-        alert("Game Over");
-        document.location.reload();
-        clearInterval(this.interval);
+      else {
+        this.lives--;
+        if(!this.lives) {
+          alert("Game Over");
+          document.location.reload();
+          clearInterval(this.interval);
+        } else {
+          this.ballPosition.x = this.canvas.width/2;
+          this.ballPosition.y = this.canvas.height-30;
+          this.ballChange.x = 2;
+          this.ballChange.y = -2;
+          this.paddle.x = (this.canvas.width-this.paddle.width)/2;
+        }
       }
     }
   }
@@ -148,7 +156,7 @@ export class Breakout implements IBreakout {
             this.bricks[c][r] = { x: 0, y: 0, visible: true };
         }
     }
-  }
+  };
 
   drawGameObjects = () => {
     this.clearGameArea();
@@ -156,6 +164,7 @@ export class Breakout implements IBreakout {
     this.drawBall();
     this.drawPaddle();
     this.drawScore();
+    this.drawLives()
   }
 
   draw = () => {
@@ -226,5 +235,12 @@ export class Breakout implements IBreakout {
       document.location.reload();
       clearInterval(this.interval);
     }
+  }
+
+  drawLives = ():void => {
+    this.ctx
+      .font("16px Arial")
+      .fillStyle("#0095DD")
+      .fillText("Lives: "+ this.lives, this.canvas.width-65, 20);
   }
 }
