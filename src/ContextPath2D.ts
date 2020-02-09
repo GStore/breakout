@@ -77,7 +77,7 @@ export class ContextPath2D implements IContextPath2D {
   }
 
   fillText = (text: string, x: number, y: number): IContextPath2D => {
-    this.fillText(text, x, y);
+    this.ctx?.fillText(text, x, y);
     return this;
   }
   

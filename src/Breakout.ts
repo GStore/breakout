@@ -155,11 +155,12 @@ export class Breakout implements IBreakout {
     this.drawBricks();
     this.drawBall();
     this.drawPaddle();
-        
+    this.drawScore();
   }
 
   draw = () => {
     this.drawGameObjects();
+    this.checkGameState();
     this.collisionDetection();
     this.checkY();
     this.checkX();
@@ -191,8 +192,24 @@ export class Breakout implements IBreakout {
     this.interval = setInterval(this.draw, REFRESHRATE);
   }
 
-  getScore(): number {
+  getScore = (): number => {
     const flatBricks: IBrick[] = this.bricks.flat();
     return flatBricks.filter(f => !f.visible ).length;
+  }
+
+  drawScore = () => {
+    this.ctx
+      .font("16px Arial")
+      .fillStyle("#0095DD")
+      .fillText(`Score: ${this.getScore()}`, 8, 20);
+  }
+
+  checkGameState = () => {
+    const score = this.getScore();
+    if(score === BRICKCOLUMNCOUNT*BRICKROWCOUNT) {
+      alert("Congratulations, you have won");
+      document.location.reload();
+      clearInterval(this.interval);
+    }
   }
 }

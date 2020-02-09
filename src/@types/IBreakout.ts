@@ -38,4 +38,6 @@ interface IBreakout {
     keyUp(event: KeyboardEvent): void;
     run(): void;
     getScore(): number;
+    drawScore(): void;
+    checkGameState(): void;
 }
