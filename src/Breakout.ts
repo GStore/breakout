@@ -68,7 +68,7 @@ export class Breakout implements IBreakout {
         if(!this.lives) {
           alert("Game Over");
           document.location.reload();
-          clearInterval(this.interval);
+          //clearInterval(this.interval);
         } else {
           this.ballPosition.x = this.canvas.width/2;
           this.ballPosition.y = this.canvas.height-30;
@@ -235,7 +235,7 @@ export class Breakout implements IBreakout {
     if(score === BRICKCOLUMNCOUNT*BRICKROWCOUNT) {
       alert("Congratulations, you have won");
       document.location.reload();
-      clearInterval(this.interval);
+      //clearInterval(this.interval);
     }
   }
 
