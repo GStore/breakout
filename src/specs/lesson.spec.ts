@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Breakout } from "../lesson";
+import { Breakout } from "../Breakout";
 
 describe("Given a Breakout class", () => {
   let context: IContextPath2D = {

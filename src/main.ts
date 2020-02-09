@@ -1,5 +1,5 @@
 import {ContextPath2D} from "./ContextPath2D";
-import { Breakout } from "./lesson";
+import { Breakout } from "./Breakout";
 
 // get canvas element
 let canvas: HTMLCanvasElement = document.getElementById("breakoutCanvas") as HTMLCanvasElement;
