@@ -18,7 +18,7 @@ export class Breakout implements IBreakout {
   private ballPosition: IPosition = {} as IPosition;
   private ballChange: IPosition = { x: BALLMOVEX, y: BALLMOVEY} as IPosition;
   private ballRadius: number = 10;
-  private interval!: number;
+  //private interval!: number;
   private bricks: IBrick[][] = [];
   private lives: number = LIVES;
 
@@ -213,7 +213,9 @@ export class Breakout implements IBreakout {
   }
 
   run = () => {
-    this.interval = setInterval(this.draw, REFRESHRATE);
+    this.draw();
+    window.requestAnimationFrame(this.run);
+    //this.interval = setInterval(this.draw, REFRESHRATE);
   }
 
   getScore = (): number => {
