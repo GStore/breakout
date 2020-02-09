@@ -8,4 +8,6 @@ interface IContextPath2D {
     clearRect: (x: number, y: number, w: number, h: number) => IContextPath2D;
     square: (x: number, y: number, w: number, h: number) => IContextPath2D;
     circle: (x: number, y: number, radius: number, startAngle: number, endAngle: number, antiClockwise?: boolean) => IContextPath2D;
+    font: (fontStyle: string) => IContextPath2D;
+    fillText: (text: string, x: number, y: number) => IContextPath2D;
 }

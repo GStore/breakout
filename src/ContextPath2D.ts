@@ -67,5 +67,18 @@ export class ContextPath2D implements IContextPath2D {
       .fill()
       .closePath();
     return this;
-  } 
+  }
+  
+  font = (fontStyle: string): IContextPath2D => {
+    if(this.ctx) {
+      this.ctx.font = fontStyle;
+    }    
+    return this;
+  }
+
+  fillText = (text: string, x: number, y: number): IContextPath2D => {
+    this.fillText(text, x, y);
+    return this;
+  }
+  
 }
