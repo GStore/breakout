@@ -19,7 +19,8 @@ interface IBreakoutVariables {
   ballPosition?: IPosition,
   ballChange?: IPosition,
   ballRadius?: number,
-  bricks?: IBrick[][]
+  bricks?: IBrick[][],
+  document: HTMLDocument
 }
 
 interface IBreakout {

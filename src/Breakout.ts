@@ -51,6 +51,13 @@ export class Breakout implements IBreakout {
     } else {
       this.createBricks();
     }    
+    this.setupHandlers(breakoutVars.document);
+  }
+
+  setupHandlers = (document: HTMLDocument): void => {
+    document.addEventListener("keydown", this.keyDown, false);
+    document.addEventListener("keyup", this.keyUp, false);
+    document.addEventListener("mousemove", this.mouseMoveHandler, false);
   }
   
   checkY = () => {
