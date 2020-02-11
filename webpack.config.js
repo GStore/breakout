@@ -10,7 +10,8 @@ module.exports = () => {
       devServer: {
         contentBase: path.join(__dirname, 'dist'),
         compress: true,
-        port: process.env.PORT || 9000
+        port: process.env.PORT || 9000,
+        open: true
       },
       // watch: true,
       context: __dirname,

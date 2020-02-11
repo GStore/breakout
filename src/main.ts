@@ -6,7 +6,7 @@ import "./main.css";
 const getCanvas = (): HTMLCanvasElement => {
   const canvas:  HTMLCanvasElement = document.createElement("canvas");
   canvas.width = 480;
-  canvas.height=320;
+  canvas.height = 320;
   const body: HTMLElement =  document.body;
   body.prepend(canvas);
   return canvas;
