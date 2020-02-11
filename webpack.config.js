@@ -2,6 +2,7 @@ const nodeexternals = require('webpack-node-externals');
 const path = require('path');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = () => {
    
@@ -31,10 +32,18 @@ module.exports = () => {
           rules: [{ 
             test: /\.(ts|js)x?$/, 
             loader: 'babel-loader',
-            exclude: /node_modules/ }],
+            exclude: /node_modules/ 
+        },
+        {
+            test: /\.css$/i,
+            use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        }],
       },
 
-      plugins: [new ForkTsCheckerWebpackPlugin(), new HtmlWebpackPlugin()],
+      plugins: [
+          new ForkTsCheckerWebpackPlugin(), 
+          new HtmlWebpackPlugin(),
+          new MiniCssExtractPlugin()],
       externals: [nodeexternals()],
       mode: process.env.NODE_ENV || 'development',
       target: 'node',

@@ -1,5 +1,6 @@
 import {ContextPath2D} from "./ContextPath2D";
 import { Breakout } from "./Breakout";
+import "./main.css";
 
 // get canvas element
 const getCanvas = (): HTMLCanvasElement => {
