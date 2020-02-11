@@ -1,12 +1,17 @@
 const nodeexternals = require('webpack-node-externals');
 const path = require('path');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = () => {
    
     let configure = {
-      watch: true,
+      devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        compress: true,
+        port: process.env.PORT || 9000
+      },
+      // watch: true,
       context: __dirname,
       entry: path.resolve(__dirname, path.join("src", "main.ts")),
 
@@ -29,7 +34,7 @@ module.exports = () => {
             exclude: /node_modules/ }],
       },
 
-      plugins: [new ForkTsCheckerWebpackPlugin()],
+      plugins: [new ForkTsCheckerWebpackPlugin(), new HtmlWebpackPlugin()],
       externals: [nodeexternals()],
       mode: process.env.NODE_ENV || 'development',
       target: 'node',
