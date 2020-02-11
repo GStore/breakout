@@ -1,18 +1,23 @@
 import {ContextPath2D} from "./ContextPath2D";
 import { Breakout } from "./Breakout";
+import "./main.css";
 
-let canvas: HTMLCanvasElement;
-let ctx: IContextPath2D; 
+// get canvas element
 const getCanvas = (): HTMLCanvasElement => {
-  return document.getElementById("breakoutCanvas") as HTMLCanvasElement;
+  const canvas:  HTMLCanvasElement = document.createElement("canvas");
+  canvas.width = 480;
+  canvas.height = 320;
+  const body: HTMLElement =  document.body;
+  body.prepend(canvas);
+  return canvas;
 }
 
-const getContextPath2d = (canvas: HTMLCanvasElement): ContextPath2D => {
-  return new ContextPath2D(canvas.getContext("2d")); 
+const getContextPathBuilder = (canvas: HTMLCanvasElement): IContextPath2D => {
+  return new ContextPath2D(canvas.getContext("2d"));
 }
 
-canvas = getCanvas();
-ctx = getContextPath2d(canvas);
+let canvas = getCanvas();
+let ctx = getContextPathBuilder(canvas);
 
 const breakoutArgs: IBreakoutVariables = {
   ctx: ctx,
