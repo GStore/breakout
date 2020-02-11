@@ -1,6 +1,5 @@
 const PADDLEWIDTH: number = 75;
 const PADDLEHEIGHT: number = 10;
-const REFRESHRATE: number = 10;
 const BALLMOVEX: number = 2;
 const BALLMOVEY: number = -2;
 const BRICKCOLUMNCOUNT: number = 5;
@@ -18,7 +17,6 @@ export class Breakout implements IBreakout {
   private ballPosition: IPosition = {} as IPosition;
   private ballChange: IPosition = { x: BALLMOVEX, y: BALLMOVEY} as IPosition;
   private ballRadius: number = 10;
-  //private interval!: number;
   private bricks: IBrick[][] = [];
   private lives: number = LIVES;
 
@@ -53,6 +51,13 @@ export class Breakout implements IBreakout {
     } else {
       this.createBricks();
     }    
+    this.setupHandlers(breakoutVars.document);
+  }
+
+  setupHandlers = (document: HTMLDocument): void => {
+    document.addEventListener("keydown", this.keyDown, false);
+    document.addEventListener("keyup", this.keyUp, false);
+    document.addEventListener("mousemove", this.mouseMoveHandler, false);
   }
   
   checkY = () => {
@@ -68,7 +73,6 @@ export class Breakout implements IBreakout {
         if(!this.lives) {
           alert("Game Over");
           document.location.reload();
-          //clearInterval(this.interval);
         } else {
           this.ballPosition.x = this.canvas.width/2;
           this.ballPosition.y = this.canvas.height-30;
@@ -215,7 +219,6 @@ export class Breakout implements IBreakout {
   run = () => {
     this.draw();
     window.requestAnimationFrame(this.run);
-    //this.interval = setInterval(this.draw, REFRESHRATE);
   }
 
   getScore = (): number => {
@@ -235,7 +238,6 @@ export class Breakout implements IBreakout {
     if(score === BRICKCOLUMNCOUNT*BRICKROWCOUNT) {
       alert("Congratulations, you have won");
       document.location.reload();
-      //clearInterval(this.interval);
     }
   }
 

@@ -21,12 +21,9 @@ let ctx = getContextPathBuilder(canvas);
 
 const breakoutArgs: IBreakoutVariables = {
   ctx: ctx,
-  canvas: canvas
+  canvas: canvas,
+  document: document
 } as IBreakoutVariables;
 
 const breakout = new Breakout(breakoutArgs);
-
-document.addEventListener("keydown", breakout.keyDown, false);
-document.addEventListener("keyup", breakout.keyUp, false);
-document.addEventListener("mousemove", breakout.mouseMoveHandler, false);
 breakout.run();
