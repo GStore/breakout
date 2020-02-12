@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { Breakout } from "../Breakout";
+import sinon from "sinon";
 
 describe("Given a Breakout class", () => {
   let context: IContextPath2D = {
@@ -9,11 +10,14 @@ describe("Given a Breakout class", () => {
     height: 300
   } as HTMLCanvasElement;
   let breakout: IBreakout;
+  let document: any = { addEventListener: sinon.stub() };
+  
 
   describe("When I call getScore", () => {  
     let breakoutVars:IBreakoutVariables = {
       ctx: context,
-      canvas: canvas
+      canvas: canvas,
+      document: document
     }
     before(() => {
       
