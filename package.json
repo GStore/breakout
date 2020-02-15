@@ -7,7 +7,8 @@
     "test": "mocha",
     "build": "webpack-cli --config ./webpack.config.js",
     "check-types": "tsc",
-    "start": "npm i && webpack-dev-server"
+    "run": "webpack-dev-server",
+    "start": "npm i && npm run run"
   },
   "author": "",
   "license": "ISC",
@@ -35,5 +36,7 @@
     "webpack-dev-server": "^3.10.3",
     "webpack-node-externals": "^1.7.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "phaser": "^3.22.0"
+  }
 }

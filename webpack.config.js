@@ -1,4 +1,3 @@
-const nodeexternals = require('webpack-node-externals');
 const path = require('path');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -26,7 +25,7 @@ module.exports = () => {
       },
 
       resolve: {
-          extensions: ['.ts', '.tsx', '.js', '.json'],
+          extensions: ['.ts', '.tsx', '.js', '.json']
       },
 
       module: {
@@ -45,9 +44,8 @@ module.exports = () => {
           new ForkTsCheckerWebpackPlugin(), 
           new HtmlWebpackPlugin(),
           new MiniCssExtractPlugin()],
-      externals: [nodeexternals()],
       mode: process.env.NODE_ENV || 'development',
-      target: 'node',
+      target: 'web',
   };
   return configure;
 
