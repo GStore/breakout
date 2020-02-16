@@ -3,6 +3,9 @@ import "phaser";
 export default class PhaserBreakout extends Phaser.Scene {
   private ball!: Phaser.Physics.Arcade.Sprite;
   private paddle!: Phaser.Physics.Arcade.Sprite;
+  private bricks!: any;
+  private newBrick!: Phaser.Physics.Arcade.Sprite;
+  private brickInfo!: any;
 
   constructor(config: Phaser.Types.Core.GameConfig) {
       super(config);
@@ -16,6 +19,7 @@ export default class PhaserBreakout extends Phaser.Scene {
     this.scale.autoCenter = Phaser.Scale.CENTER_BOTH;
     this.load.image("ball", "assets/ball.png");
     this.load.image("paddle", "assets/paddle.png");
+    this.load.image("brick", "assets/brick.png");
   }
 
   /**
@@ -38,12 +42,14 @@ export default class PhaserBreakout extends Phaser.Scene {
       .setOrigin(0.5, 1)
       .setImmovable(true)
       .setBounce(1);    
+    
+    this.initBricks();
   }
 
   /**
    * update
    */
-  update() {
+  update = () =>  {
     this.physics.collide(this.ball, this.paddle);
     this.paddle.x = this.game.input.activePointer.x || this.game.scale.width*0.5;
 
@@ -52,5 +58,37 @@ export default class PhaserBreakout extends Phaser.Scene {
         alert("Game Over");
         location.reload();
     }
+  }
+
+  initBricks = () => {
+    this.brickInfo = {
+      width: 50,
+      height: 20,
+      count: {
+          row: 3,
+          col: 7
+      },
+      offset: {
+          top: 50,
+          left: 60
+      },
+      padding: 10
+    };
+
+    this.bricks = this.add.group();
+
+    for(let c:number=0; c<this.brickInfo.count.col; c++) {
+      for(let r:number=0; r<this.brickInfo.count.row; r++) {
+        var brickX = (c*(this.brickInfo.width+this.brickInfo.padding))+this.brickInfo.offset.left;
+        var brickY = (r*(this.brickInfo.height+this.brickInfo.padding))+this.brickInfo.offset.top;
+
+        this.newBrick = this.physics.add
+          .sprite(brickX, brickY, 'brick')
+          .setOrigin(0.5)
+          .setImmovable(true);
+        //this.physics.enable(newBrick, Phaser.Physics.ARCADE);
+        this.bricks.add(this.newBrick);
+      }
+  }
   }
 }
