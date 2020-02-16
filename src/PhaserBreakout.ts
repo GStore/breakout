@@ -21,7 +21,8 @@ export default class PhaserBreakout extends Phaser.Scene {
    */
   create = () => {
     this.ball = this.physics.add.sprite(50, 50, "ball");
-    this.ball.setVelocity(150, 150)
+    this.ball.setVelocity(150, 150);
+    this.ball.setCollideWorldBounds(true, 1, 1);
   }
 
   /**
