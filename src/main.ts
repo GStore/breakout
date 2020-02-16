@@ -7,7 +7,10 @@ const config: Phaser.Types.Core.GameConfig = {
   backgroundColor: '#18216D',
   width: 800,
   height: 600,
-  scene: PhaserBreakout
+  scene: PhaserBreakout,
+  physics: {
+    default: "arcade"
+  }
 };
 
 const game = new Phaser.Game(config);

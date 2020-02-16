@@ -1,7 +1,7 @@
 import "phaser";
 
 export default class PhaserBreakout extends Phaser.Scene {
-  private ball!: Phaser.GameObjects.Sprite;
+  private ball!: Phaser.Physics.Arcade.Sprite;
 
   constructor(config: Phaser.Types.Core.GameConfig) {
       super(config);
@@ -20,14 +20,14 @@ export default class PhaserBreakout extends Phaser.Scene {
    * 
    */
   create = () => {
-    this.ball = this.add.sprite(50, 50, "ball");
+    this.ball = this.physics.add.sprite(50, 50, "ball");
+    this.ball.setVelocity(150, 150)
   }
 
   /**
    * update
    */
   update() {
-    this.ball.x += 1;
-    this.ball.y += 1;    
+    
   }
 }
