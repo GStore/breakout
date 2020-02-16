@@ -6,6 +6,8 @@ export default class PhaserBreakout extends Phaser.Scene {
   private bricks!: Phaser.GameObjects.Group;
   private newBrick!: Phaser.Physics.Arcade.Sprite;
   private brickInfo!: any;
+  private scoreText!: Phaser.GameObjects.Text;
+  private score  = 0;
 
   constructor(config: Phaser.Types.Core.GameConfig) {
       super(config);
@@ -28,6 +30,7 @@ export default class PhaserBreakout extends Phaser.Scene {
   create = () => {
     this.physics.world.setBoundsCollision(true, true, true, false);
     this.physics.world.checkCollision.down = false;
+    this.scoreText = this.add.text(5,5, "Points: 0", { font: '18px Arial', fill: '#0095DD' });
 
     this.ball = this.physics.add
       .sprite(this.game.scale.width*0.5, this.game.scale.height-25, "ball")
@@ -67,6 +70,8 @@ export default class PhaserBreakout extends Phaser.Scene {
 
   ballHitBrick = (ball: Phaser.GameObjects.GameObject, brick: Phaser.GameObjects.GameObject) => {
     brick.destroy();
+    this.score+=10;
+    this.scoreText.setText(`Points: ${String(this.score)}`);
   }
 
   initBricks = () => {
