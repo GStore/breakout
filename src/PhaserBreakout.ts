@@ -50,14 +50,23 @@ export default class PhaserBreakout extends Phaser.Scene {
    * update
    */
   update = () =>  {
-    this.physics.collide(this.ball, this.paddle);
+    this.collisionDetection();
     this.paddle.x = this.game.input.activePointer.x || this.game.scale.width*0.5;
-
+    
     if (this.ball.y > 600)
     {
         alert("Game Over");
         location.reload();
     }
+  }
+
+  collisionDetection = () => {
+    this.physics.collide(this.ball, this.paddle);
+    this.physics.collide(this.ball, this.bricks, this.ballHitBrick);
+  }
+
+  ballHitBrick = (ball: Phaser.GameObjects.GameObject, brick: Phaser.GameObjects.GameObject) => {
+    brick.destroy();
   }
 
   initBricks = () => {
