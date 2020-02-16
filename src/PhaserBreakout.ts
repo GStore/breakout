@@ -72,6 +72,11 @@ export default class PhaserBreakout extends Phaser.Scene {
     brick.destroy();
     this.score+=10;
     this.scoreText.setText(`Points: ${String(this.score)}`);
+
+    if(this.bricks.countActive() === 0) {
+      alert('You won the game, congratulations!');
+      location.reload();
+    }
   }
 
   initBricks = () => {
