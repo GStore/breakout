@@ -22,16 +22,22 @@ export default class PhaserBreakout extends Phaser.Scene {
    * 
    */
   create = () => {
-    this.ball = this.physics.add.sprite(this.game.scale.width*0.5, this.game.scale.height-25, "ball");
-    this.ball.setOrigin(0.5);
-    this.ball.setVelocity(150, -150);
-    this.ball.setCollideWorldBounds(true);
-    this.ball.setBounce(1);
+    this.physics.world.setBoundsCollision(true, true, true, false);
+    this.physics.world.checkCollision.down = false;
 
-    this.paddle = this.physics.add.sprite(this.game.scale.width*0.5, this.game.scale.height-5*0.5, "paddle");
-    this.paddle.setOrigin(0.5, 1);
-    this.paddle.body.immovable = true;
-    this.paddle.setBounce(1);
+    this.ball = this.physics.add
+      .sprite(this.game.scale.width*0.5, this.game.scale.height-25, "ball")
+      .setCollideWorldBounds(true)
+      .setBounce(1)
+      .setOrigin(0.5)
+      .setVelocity(150, -150);
+    
+
+    this.paddle = this.physics.add
+      .sprite(this.game.scale.width*0.5, this.game.scale.height-5*0.5, "paddle")
+      .setOrigin(0.5, 1)
+      .setImmovable(true)
+      .setBounce(1);    
   }
 
   /**
@@ -40,5 +46,11 @@ export default class PhaserBreakout extends Phaser.Scene {
   update() {
     this.physics.collide(this.ball, this.paddle);
     this.paddle.x = this.game.input.activePointer.x || this.game.scale.width*0.5;
+
+    if (this.ball.y > 600)
+    {
+        alert("Game Over");
+        location.reload();
+    }
   }
 }
