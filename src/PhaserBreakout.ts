@@ -3,7 +3,7 @@ import "phaser";
 export default class PhaserBreakout extends Phaser.Scene {
   private ball!: Phaser.Physics.Arcade.Sprite;
   private paddle!: Phaser.Physics.Arcade.Sprite;
-  private bricks!: any;
+  private bricks!: Phaser.GameObjects.Group;
   private newBrick!: Phaser.Physics.Arcade.Sprite;
   private brickInfo!: any;
 
@@ -70,7 +70,7 @@ export default class PhaserBreakout extends Phaser.Scene {
       },
       offset: {
           top: 50,
-          left: 60
+          left: (this.game.scale.width*0.5)/2
       },
       padding: 10
     };
@@ -89,6 +89,7 @@ export default class PhaserBreakout extends Phaser.Scene {
         //this.physics.enable(newBrick, Phaser.Physics.ARCADE);
         this.bricks.add(this.newBrick);
       }
-  }
+    }
+
   }
 }
