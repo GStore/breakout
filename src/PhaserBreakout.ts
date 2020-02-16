@@ -1,7 +1,7 @@
 import "phaser";
 
 export default class PhaserBreakout extends Phaser.Scene {
-  private ball!: any;
+  private ball!: Phaser.GameObjects.Sprite;
 
   constructor(config: Phaser.Types.Core.GameConfig) {
       super(config);
@@ -27,6 +27,7 @@ export default class PhaserBreakout extends Phaser.Scene {
    * update
    */
   update() {
-    
+    this.ball.x += 1;
+    this.ball.y += 1;    
   }
 }
