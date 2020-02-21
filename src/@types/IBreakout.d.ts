@@ -21,6 +21,7 @@ interface IBreakoutVariables {
   ballRadius?: number,
   bricks?: IBrick[][],
   document: HTMLDocument
+  
 }
 
 interface IBreakout {
