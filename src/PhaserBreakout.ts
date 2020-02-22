@@ -8,6 +8,10 @@ export default class PhaserBreakout extends Phaser.Scene {
   private brickInfo!: any;
   private scoreText!: Phaser.GameObjects.Text;
   private score  = 0;
+  private textStyle =  { font: '18px Arial', fill: '#0095DD' };
+  private lives: number = 3;
+  private livesText!: Phaser.GameObjects.Text;
+  private lifeLost!: Phaser.GameObjects.Text;
 
   constructor(config: Phaser.Types.Core.GameConfig) {
       super(config);
@@ -30,8 +34,12 @@ export default class PhaserBreakout extends Phaser.Scene {
   create = () => {
     this.physics.world.setBoundsCollision(true, true, true, false);
     this.physics.world.checkCollision.down = false;
-    this.scoreText = this.add.text(5,5, "Points: 0", { font: '18px Arial', fill: '#0095DD' });
-
+    this.scoreText = this.add.text(5,5, "Points: 0", this.textStyle);
+    this.livesText = this.add.text(this.game.scale.width - 5, 5, `Lives: ${this.lives}`, this.textStyle);
+    this.livesText.setOrigin(1,0);
+    this.lifeLost = this.add.text(this.game.scale.width * 0.5, this.game.scale.height * 0.5, "Life lost, click to continue", this.textStyle);
+    this.lifeLost.setOrigin(0.5);
+    this.lifeLost.setVisible(false);
     this.ball = this.physics.add
       .sprite(this.game.scale.width*0.5, this.game.scale.height-25, "ball")
       .setCollideWorldBounds(true)
@@ -54,13 +62,35 @@ export default class PhaserBreakout extends Phaser.Scene {
    */
   update = () =>  {
     this.collisionDetection();
-    this.paddle.x = this.game.input.activePointer.x || this.game.scale.width*0.5;
+    if(!this.lifeLost.visible) {
+      this.paddle.x = this.game.input.activePointer.x || this.game.scale.width*0.5;
+    }    
     
     if (this.ball.y > 600)
     {
-        alert("Game Over");
-        location.reload();
+      this.ballLeavesScreen();
     }
+  }
+
+  ballLeavesScreen = () => {
+    this.lives--;
+    this.livesText.setText(`Lives: ${this.lives}`);
+
+    if(this.lives) {      
+      this.lifeLost.setVisible(true);
+      this.ball.body.reset(this.game.scale.width * 0.5, this.game.scale.height -25);
+      this.paddle.body.reset(this.game.scale.width * 0.5, this.game.scale.height - 5);
+
+      this.input.once(Phaser.Input.Events.POINTER_DOWN, () => {
+        this.lifeLost.setVisible(false);
+        this.ball.setVelocity(150 , -150);
+      });
+    }
+    else {
+      alert("Game Over");
+      location.reload();
+    }
+
   }
 
   collisionDetection = () => {
