@@ -1,4 +1,5 @@
 import "phaser";
+import { Tweens } from "phaser";
 
 export default class PhaserBreakout extends Phaser.Scene {
   private ball!: Phaser.Physics.Arcade.Sprite;
@@ -23,7 +24,10 @@ export default class PhaserBreakout extends Phaser.Scene {
   preload = () => {
     this.scale.scaleMode = Phaser.Scale.ScaleModes.FIT;
     this.scale.autoCenter = Phaser.Scale.CENTER_BOTH;
-    this.load.image("ball", "assets/ball.png");
+    //this.load.image("ball", "assets/ball.png");
+    this.load.spritesheet("ball", "assets/wobble.png", {
+      frameWidth: 20
+    });
     this.load.image("paddle", "assets/paddle.png");
     this.load.image("brick", "assets/brick.png");
   }
@@ -46,7 +50,22 @@ export default class PhaserBreakout extends Phaser.Scene {
       .setBounce(1)
       .setOrigin(0.5)
       .setVelocity(150, -150);
-    
+  
+    this.ball.anims.animationManager.create({
+      key: "wobble",
+      frames: [
+        { frame: 0, key: "ball" },
+        { frame: 1, key: "ball" },
+        { frame: 0, key: "ball" },
+        { frame: 2, key: "ball" },
+        { frame: 0, key: "ball" },
+        { frame: 1, key: "ball" },
+        { frame: 0, key: "ball" },
+        { frame: 2, key: "ball" },
+        { frame: 0, key: "ball" }
+      ],
+      frameRate: 24
+    })
 
     this.paddle = this.physics.add
       .sprite(this.game.scale.width*0.5, this.game.scale.height-5*0.5, "paddle")
@@ -94,12 +113,26 @@ export default class PhaserBreakout extends Phaser.Scene {
   }
 
   collisionDetection = () => {
-    this.physics.collide(this.ball, this.paddle);
+    this.physics.collide(this.ball, this.paddle, this.ballHitPaddle);
     this.physics.collide(this.ball, this.bricks, this.ballHitBrick);
   }
 
+  ballHitPaddle  = (ball: Phaser.GameObjects.GameObject, paddle: Phaser.GameObjects.GameObject) => {
+    (ball as Phaser.Physics.Arcade.Sprite).anims.play("wobble");
+  }
+
   ballHitBrick = (ball: Phaser.GameObjects.GameObject, brick: Phaser.GameObjects.GameObject) => {
-    brick.destroy();
+
+    this.tweens.add({
+      targets: brick,
+      scale: 0,
+      duration: 100,
+      ease: Phaser.Math.Easing.Linear.Linear
+    })
+    .once(Phaser.Tweens.Events.TWEEN_COMPLETE, () => {
+      brick.destroy();
+    });;
+
     this.score+=10;
     this.scoreText.setText(`Points: ${String(this.score)}`);
 
