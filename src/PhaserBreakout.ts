@@ -1,5 +1,5 @@
 import "phaser";
-import { Tweens } from "phaser";
+import { Tweens, Physics } from "phaser";
 
 export default class PhaserBreakout extends Phaser.Scene {
   private ball!: Phaser.Physics.Arcade.Sprite;
@@ -13,6 +13,8 @@ export default class PhaserBreakout extends Phaser.Scene {
   private lives: number = 3;
   private livesText!: Phaser.GameObjects.Text;
   private lifeLost!: Phaser.GameObjects.Text;
+  private playing:boolean = false;
+  private startButton!: Phaser.Physics.Arcade.Sprite;
 
   constructor(config: Phaser.Types.Core.GameConfig) {
       super(config);
@@ -30,6 +32,10 @@ export default class PhaserBreakout extends Phaser.Scene {
     });
     this.load.image("paddle", "assets/paddle.png");
     this.load.image("brick", "assets/brick.png");
+    this.load.spritesheet("button", "assets/button.png", {
+      frameWidth: 120,
+      frameHeight: 40
+    });
   }
 
   /**
@@ -44,12 +50,23 @@ export default class PhaserBreakout extends Phaser.Scene {
     this.lifeLost = this.add.text(this.game.scale.width * 0.5, this.game.scale.height * 0.5, "Life lost, click to continue", this.textStyle);
     this.lifeLost.setOrigin(0.5);
     this.lifeLost.setVisible(false);
+
+    this.startButton = this.physics.add
+      .sprite(this.game.scale.width * 0.5, this.game.scale.height * 0.5, "button")
+      .setOrigin(0.5)
+      .setInteractive();
+    
+    this.startButton.once(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+      this.playing = true;
+      this.startButton.setVisible(false);
+      this.ball.setVelocity(150, - 150);
+    });
+
     this.ball = this.physics.add
       .sprite(this.game.scale.width*0.5, this.game.scale.height-25, "ball")
       .setCollideWorldBounds(true)
       .setBounce(1)
-      .setOrigin(0.5)
-      .setVelocity(150, -150);
+      .setOrigin(0.5);
   
     this.ball.anims.animationManager.create({
       key: "wobble",
@@ -81,7 +98,7 @@ export default class PhaserBreakout extends Phaser.Scene {
    */
   update = () =>  {
     this.collisionDetection();
-    if(!this.lifeLost.visible) {
+    if(this.playing) {
       this.paddle.x = this.game.input.activePointer.x || this.game.scale.width*0.5;
     }    
     
@@ -94,13 +111,14 @@ export default class PhaserBreakout extends Phaser.Scene {
   ballLeavesScreen = () => {
     this.lives--;
     this.livesText.setText(`Lives: ${this.lives}`);
-
+    this.playing = false;
     if(this.lives) {      
       this.lifeLost.setVisible(true);
       this.ball.body.reset(this.game.scale.width * 0.5, this.game.scale.height -25);
       this.paddle.body.reset(this.game.scale.width * 0.5, this.game.scale.height - 5);
 
       this.input.once(Phaser.Input.Events.POINTER_DOWN, () => {
+        this.playing = true;
         this.lifeLost.setVisible(false);
         this.ball.setVelocity(150 , -150);
       });
@@ -122,7 +140,6 @@ export default class PhaserBreakout extends Phaser.Scene {
   }
 
   ballHitBrick = (ball: Phaser.GameObjects.GameObject, brick: Phaser.GameObjects.GameObject) => {
-
     this.tweens.add({
       targets: brick,
       scale: 0,
@@ -130,7 +147,7 @@ export default class PhaserBreakout extends Phaser.Scene {
       ease: Phaser.Math.Easing.Linear.Linear
     })
     .once(Phaser.Tweens.Events.TWEEN_COMPLETE, () => {
-      brick.destroy();
+      (brick as Physics.Arcade.Sprite).setVisible(false);
     });;
 
     this.score+=10;
