@@ -136,7 +136,9 @@ export default class PhaserBreakout extends Phaser.Scene {
   }
 
   ballHitPaddle  = (ball: Phaser.GameObjects.GameObject, paddle: Phaser.GameObjects.GameObject) => {
-    (ball as Phaser.Physics.Arcade.Sprite).anims.play("wobble");
+    const theBall: Phaser.Physics.Arcade.Sprite = ball as Phaser.Physics.Arcade.Sprite;
+    theBall.anims.play("wobble");
+    theBall.body.velocity.x = -1*5*(this.paddle.x-this.ball.x);
   }
 
   ballHitBrick = (ball: Phaser.GameObjects.GameObject, brick: Phaser.GameObjects.GameObject) => {
