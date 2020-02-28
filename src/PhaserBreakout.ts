@@ -24,11 +24,12 @@ export default class PhaserBreakout extends Phaser.Scene {
 
   /**
    * preload
+   * Set scale 
+   * Preload images and sprites
    */
   preload = () => {
-    this.scale.scaleMode = Phaser.Scale.ScaleModes.FIT;
+    this.scale.scaleMode = Phaser.Scale.ScaleModes.NONE;
     this.scale.autoCenter = Phaser.Scale.CENTER_BOTH;
-    //this.load.image("ball", "assets/ball.png");
     this.load.spritesheet("ball", "assets/wobble.png", {
       frameWidth: 20
     });
@@ -41,7 +42,8 @@ export default class PhaserBreakout extends Phaser.Scene {
   }
 
   /**
-   * 
+   * create
+   * Used for setup of objects
    */
   create = () => {
     this.physics.world.setBoundsCollision(true, true, true, false);
@@ -108,39 +110,38 @@ export default class PhaserBreakout extends Phaser.Scene {
 
   /**
    * update
+   * Update game state
+   * Check collisions
+   * Adjust paddle
    */
   update = () =>  {
     this.collisionDetection();
-    if(this.playing) {
-      this.checkPaddle();
-    }    
-    
-    if (this.ball.y > 600)
-    {
-      this.ballLeavesScreen();
-    }
+    this.checkPaddle();  
+    this.hasBallLeftScreen();    
   }
 
-  ballLeavesScreen = () => {
-    this.lives--;
-    this.livesText.setText(`Lives: ${this.lives}`);
-    this.playing = false;
-    if(this.lives) {      
-      this.lifeLost.setVisible(true);
-      this.ball.body.reset(this.game.scale.width * 0.5, this.game.scale.height -25);
-      this.paddle.body.reset(this.game.scale.width * 0.5, this.game.scale.height - 5);
+  hasBallLeftScreen = () => {
+    if (this.ball.y > 600)
+    {
+      this.lives--;
+      this.livesText.setText(`Lives: ${this.lives}`);
+      this.playing = false;
+      if(this.lives) {      
+        this.lifeLost.setVisible(true);
+        this.ball.body.reset(this.game.scale.width * 0.5, this.game.scale.height -25);
+        this.paddle.body.reset(this.game.scale.width * 0.5, this.game.scale.height - 5);
 
-      this.input.once(Phaser.Input.Events.POINTER_DOWN, () => {
-        this.playing = true;
-        this.lifeLost.setVisible(false);
-        this.ball.setVelocity(150 , -150);
-      });
+        this.input.once(Phaser.Input.Events.POINTER_DOWN, () => {
+          this.playing = true;
+          this.lifeLost.setVisible(false);
+          this.ball.setVelocity(150 , -150);
+        });
+      }
+      else {
+        alert("Game Over");
+        location.reload();
+      }
     }
-    else {
-      alert("Game Over");
-      location.reload();
-    }
-
   }
 
   collisionDetection = () => {
@@ -200,7 +201,6 @@ export default class PhaserBreakout extends Phaser.Scene {
           .sprite(brickX, brickY, 'brick')
           .setOrigin(0.5)
           .setImmovable(true);
-        //this.physics.enable(newBrick, Phaser.Physics.ARCADE);
         this.bricks.add(this.newBrick);
       }
     }
@@ -227,25 +227,29 @@ export default class PhaserBreakout extends Phaser.Scene {
   }
 
   checkPaddle = () => {
-    if(this.rightPressed) {
-      this.paddle.x += 7;
-      if (this.paddle.x + this.paddle.width > this.game.scale.width){
-        this.paddle.x = this.game.scale.width - this.paddle.width;
+    if(this.playing) {    
+      if(this.rightPressed) {
+        this.paddle.x += 7;
+        if (this.paddle.x + this.paddle.width > this.game.scale.width){
+          this.paddle.x = this.game.scale.width - this.paddle.width;
+        }
+        return true;
       }
-      return true;
-    }
 
-    if(this.leftPressed) {
-      this.paddle.x += -7;
-      if (this.paddle.x < 0){
-        this.paddle.x = 0;
+      if(this.leftPressed) {
+        this.paddle.x += -7;
+        if (this.paddle.x < 0){
+          this.paddle.x = 0;
+        }
+        return true;
       }
-      return true;
-    }
+    } 
     return false;
   }
 
   checkPointer  = () => {
-    this.paddle.x = this.game.input.activePointer.x || this.game.scale.width*0.5;
+    if(this.playing) {   
+      this.paddle.x = this.game.input.activePointer.x || this.game.scale.width*0.5;
+    }
   }
 }
