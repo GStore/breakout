@@ -1,5 +1,6 @@
 import "phaser";
-import { Tweens, Physics } from "phaser";
+import { Physics } from "phaser";
+import { KeyCheck } from "./KeyCheck";
 
 export default class PhaserBreakout extends Phaser.Scene {
   private ball!: Phaser.Physics.Arcade.Sprite;
@@ -207,21 +208,19 @@ export default class PhaserBreakout extends Phaser.Scene {
   }
 
   keyDown = (event: KeyboardEvent) => {
-    if(event.key == "Right" || event.key == "ArrowRight") {
+    if(KeyCheck.RightPress(event)) {
       this.rightPressed = true;
     }
-    else if(event.key == "Left" || event.key == "ArrowLeft") {
+    else if(KeyCheck.LeftPress(event)) {
         this.leftPressed = true;
     }
   }
   
   keyUp = (event: KeyboardEvent) => {
-    if(event.key == "Right" || event.key == "ArrowRight") {
-      this.rightPressed = false;
+    if(KeyCheck.RightPress(event)) {
       this.rightPressed = undefined;
     }
-    else if(event.key == "Left" || event.key == "ArrowLeft") {
-        this.leftPressed = false;
+    else if(KeyCheck.LeftPress(event)) {
         this.leftPressed = undefined;
     }
   }
