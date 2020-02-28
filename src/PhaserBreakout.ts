@@ -15,6 +15,8 @@ export default class PhaserBreakout extends Phaser.Scene {
   private lifeLost!: Phaser.GameObjects.Text;
   private playing:boolean = false;
   private startButton!: Phaser.Physics.Arcade.Sprite;
+  public rightPressed!: boolean | undefined;
+  public leftPressed!: boolean | undefined;
 
   constructor(config: Phaser.Types.Core.GameConfig) {
       super(config);
@@ -91,6 +93,17 @@ export default class PhaserBreakout extends Phaser.Scene {
       .setBounce(1);    
     
     this.initBricks();
+    this.input.keyboard.on(Phaser.Input.Keyboard.Events.ANY_KEY_UP, (event: KeyboardEvent) => {
+      this.keyUp(event);
+    });
+
+    this.input.keyboard.on(Phaser.Input.Keyboard.Events.ANY_KEY_DOWN, (event: KeyboardEvent) => {
+      this.keyDown(event);
+    });
+
+    this.input.on(Phaser.Input.Events.GAMEOBJECT_POINTER_MOVE, () => {
+      this.checkPointer();
+    });
   }
 
   /**
@@ -99,7 +112,7 @@ export default class PhaserBreakout extends Phaser.Scene {
   update = () =>  {
     this.collisionDetection();
     if(this.playing) {
-      this.paddle.x = this.game.input.activePointer.x || this.game.scale.width*0.5;
+      this.checkPaddle();
     }    
     
     if (this.ball.y > 600)
@@ -191,6 +204,48 @@ export default class PhaserBreakout extends Phaser.Scene {
         this.bricks.add(this.newBrick);
       }
     }
+  }
 
+  keyDown = (event: KeyboardEvent) => {
+    if(event.key == "Right" || event.key == "ArrowRight") {
+      this.rightPressed = true;
+    }
+    else if(event.key == "Left" || event.key == "ArrowLeft") {
+        this.leftPressed = true;
+    }
+  }
+  
+  keyUp = (event: KeyboardEvent) => {
+    if(event.key == "Right" || event.key == "ArrowRight") {
+      this.rightPressed = false;
+      this.rightPressed = undefined;
+    }
+    else if(event.key == "Left" || event.key == "ArrowLeft") {
+        this.leftPressed = false;
+        this.leftPressed = undefined;
+    }
+  }
+
+  checkPaddle = () => {
+    if(this.rightPressed) {
+      this.paddle.x += 7;
+      if (this.paddle.x + this.paddle.width > this.game.scale.width){
+        this.paddle.x = this.game.scale.width - this.paddle.width;
+      }
+      return true;
+    }
+
+    if(this.leftPressed) {
+      this.paddle.x += -7;
+      if (this.paddle.x < 0){
+        this.paddle.x = 0;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  checkPointer  = () => {
+    this.paddle.x = this.game.input.activePointer.x || this.game.scale.width*0.5;
   }
 }

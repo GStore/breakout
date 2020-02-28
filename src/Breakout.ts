@@ -96,12 +96,12 @@ export class Breakout implements IBreakout {
         const currentBrick = this.bricks[c][r];
         if(currentBrick.visible) {
           if(this.ballPosition.x > currentBrick.x 
-              && this.ballPosition.x < currentBrick.x+BRICKWIDTH 
-              && this.ballPosition.y > currentBrick.y 
-              && this.ballPosition.y < currentBrick.y+BRICKHEIGHT) {
-                this.ballChange.y = -this.ballChange.y;
-                currentBrick.visible = false;
-              }
+            && this.ballPosition.x < currentBrick.x+BRICKWIDTH 
+            && this.ballPosition.y > currentBrick.y 
+            && this.ballPosition.y < currentBrick.y+BRICKHEIGHT) {
+              this.ballChange.y = -this.ballChange.y;
+              currentBrick.visible = false;
+          }
         }
       }
     }
